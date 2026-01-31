@@ -1,19 +1,8 @@
 // Mock API - in real app this would use axios or fetch
 
-// Mock API - in real app this would be your actual API
-export interface Ticket {
-  id: string;
-  title: string;
-  status: 'open' | 'in-progress' | 'closed';
-  createdAt: string;
-  description?: string;
-}
+import { Ticket, TicketFilters } from './types'
 
-export const fetchTickets = async (params?: {
-  search?: string;
-  status?: string;
-  sortBy?: 'date' | 'title';
-}): Promise<Ticket[]> => {
+export const fetchTickets = async (params?: TicketFilters): Promise<Ticket[]> => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
   
@@ -25,6 +14,7 @@ export const fetchTickets = async (params?: {
       status: 'open',
       createdAt: '2024-01-15T10:00:00Z',
       description: 'Users cannot log in with their credentials',
+      read: false
     },
     {
       id: '2',
@@ -32,6 +22,7 @@ export const fetchTickets = async (params?: {
       status: 'in-progress',
       createdAt: '2024-01-14T14:30:00Z',
       description: 'Redesign the dashboard to match new brand guidelines',
+      read: true
     },
     {
       id: '3',
@@ -39,6 +30,7 @@ export const fetchTickets = async (params?: {
       status: 'closed',
       createdAt: '2024-01-10T09:15:00Z',
       description: 'Implement dark mode theme across the application',
+      read: true
     },
     {
       id: '4',
@@ -46,7 +38,8 @@ export const fetchTickets = async (params?: {
       status: 'open',
       createdAt: '2024-01-12T11:20:00Z',
       description: 'Improve performance of slow database queries',
-    },
+      read: false
+    }
   ];
 
   let filtered = [...mockTickets];
@@ -82,6 +75,7 @@ export const fetchTicketById = async (id: string): Promise<Ticket> => {
       status: 'open',
       createdAt: '2024-01-15T10:00:00Z',
       description: 'Users cannot log in with their credentials. This is a critical issue affecting multiple users.',
+      read: false
     },
     {
       id: '2',
@@ -89,6 +83,7 @@ export const fetchTicketById = async (id: string): Promise<Ticket> => {
       status: 'in-progress',
       createdAt: '2024-01-14T14:30:00Z',
       description: 'Redesign the dashboard to match new brand guidelines. Include new color scheme and typography.',
+      read: false
     },
     {
       id: '3',
@@ -96,6 +91,7 @@ export const fetchTicketById = async (id: string): Promise<Ticket> => {
       status: 'closed',
       createdAt: '2024-01-10T09:15:00Z',
       description: 'Implement dark mode theme across the application. Ensure all components support both themes.',
+      read: false
     },
     {
       id: '4',
@@ -103,6 +99,7 @@ export const fetchTicketById = async (id: string): Promise<Ticket> => {
       status: 'open',
       createdAt: '2024-01-12T11:20:00Z',
       description: 'Improve performance of slow database queries. Add proper indexing and optimize joins.',
+      read: false
     },
   ];
 

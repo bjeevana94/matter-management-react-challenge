@@ -1,9 +1,7 @@
+import { Ticket } from "../types";
+
 interface TicketCardProps {
-  ticket: {
-    id: string;
-    title: string;
-    status: 'open' | 'closed';
-  };
+  ticket: Ticket
   isSelected: boolean;
   onClick: () => void;
 }
