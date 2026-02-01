@@ -1,6 +1,6 @@
-import { fetchTicketById, fetchTickets } from '@/pages/tickets/api';
-import { TicketFilters } from './types';
-import { useQuery } from '@tanstack/react-query';
+import { fetchTicketById, fetchTickets, updateTicketReadStatus} from '@/pages/tickets/api';
+import { Ticket, TicketFilters } from './types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const queryKeys = {
   tickets: {
@@ -23,5 +23,27 @@ export const useGetTicketById =(id: string | undefined, options?: { enabled?: bo
       queryKey: queryKeys.tickets.detail(id as string),
       queryFn: () => fetchTicketById(id as string),
       enabled: options?.enabled || !!id,
+  })
+}
+
+export const useUpdateTicketReadStatusMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => updateTicketReadStatus(id),
+    onSuccess: (data, ticketId) => {
+      queryClient.setQueriesData(
+        { queryKey: queryKeys.tickets.lists() },
+        (oldData: Ticket[] | undefined) => {
+          if (!oldData) return oldData;
+        
+          return oldData?.map(ticket =>
+            ticket.id === ticketId
+              ? { ...ticket, ...data }
+              : ticket
+          )
+        }
+      );
+    }
   })
 }

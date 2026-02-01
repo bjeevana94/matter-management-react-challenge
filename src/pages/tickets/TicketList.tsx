@@ -18,13 +18,19 @@ const TicketList = () => {
   const { data: tickets, isLoading } = useGetTickets({
     status: filterStatus === 'all' ? undefined: filterStatus,
     // Effect 5: Show success message after refetch (should use React Query callback)
-    // onSuccess callback is deprecated in react query v5. If console log is absolutely necessary, can probably use useRef instead
+    // onSuccess callback is deprecated in react query v5. If console log is absolutely necessary, can probably use useEffect instead
   });
 
   // Removed notificationCount from state as i belive on every ticket click, query mutation can be called to update he read value  which will reflect here
   const notificationCount = useMemo(() => {
     return tickets?.filter((t) => !t.read).length ?? 0;
   }, [tickets])
+
+  /* 
+    As a Future improvement, every ticket click, query mutation can be called to update the read value 
+    const {mutate: markTicketAsRead} = useUpdateTicketReadStatusMutation();
+    call markTicketAsRead(ticketId) in handleTicketSelection()
+  */
 
   // Effect 2: Refetch when filter changes
   // No need refetch manually, query keys should do the job
